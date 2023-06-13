@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
  * @param {ReactElement} props.LoadingComponent the comp to show when checking version
  * @param {boolean} props.disabled disable the component feature and simply return children
  * @param {string} props.localVersion the version imported from the .env file
+ * @param {string} props.baseurl the path where the app is hosted like '/myapp
  * @returns
  */
 export const VersionChecker = ({
@@ -13,13 +14,14 @@ export const VersionChecker = ({
   disabled = false,
   children,
   localVersion,
+  baseurl
 }) => {
   // else check the version in meta.json file
   const [loading, setLoading] = useState(true);
 
   const [remoteVersion, setRemoteVersion] = useState(null);
 
-  const url = "/meta.json";
+  const url = `${baseurl}/meta.json`;
 
   const getMetaJson = async () => {
     try {
@@ -34,8 +36,9 @@ export const VersionChecker = ({
       setRemoteVersion(meta.version);
     } catch (e) {
       console.log("@spa-version, couldn't fetch meta.json");
-      setLoading(false);
       console.error("@spa-version, error:", e);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -65,12 +68,10 @@ export const VersionChecker = ({
   useEffect(() => {
     if (remoteVersion) {
       if (remoteVersion === localVersion) {
-        setLoading(false);
-      } else {
         clearCacheAndReload();
       }
     }
-  }, [loading, remoteVersion]);
+  }, [remoteVersion]);
 
   return loading ? LoadingComponent : children;
 };
