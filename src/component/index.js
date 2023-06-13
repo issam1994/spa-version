@@ -14,7 +14,7 @@ export const VersionChecker = ({
   disabled = false,
   children,
   localVersion,
-  baseurl
+  baseurl = ''
 }) => {
   // else check the version in meta.json file
   const [loading, setLoading] = useState(true);
