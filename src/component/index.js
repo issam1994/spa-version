@@ -67,7 +67,7 @@ export const VersionChecker = ({
   // on remote version received
   useEffect(() => {
     if (remoteVersion) {
-      if (remoteVersion === localVersion) {
+      if (remoteVersion !== localVersion) {
         clearCacheAndReload();
       }
     }
